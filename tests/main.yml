@@ -33,7 +33,7 @@
       changed_when: False
       tags: [ 'pre-test' ]
   post_tasks:
-    - name: Test simple group presence test
+    - name: Test simple group presence
       group:
         name: 'test'
         state: 'present'
