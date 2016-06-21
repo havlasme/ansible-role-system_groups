@@ -7,6 +7,8 @@ system_groups
 
 An [Ansible](https://www.ansible.com/) role to manage system groups.
 
+Group `root` can't be managed using this role for security reasons.
+
 Requirements
 ------------
 
