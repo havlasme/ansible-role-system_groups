@@ -1,18 +1,9 @@
 ---
-- name: Setup system groups
+- name: Manage system groups
   group:
     name: '{{ item.name }}'
     gid: '{{ item.gid | default(omit) }}'
     system: '{{ item.system | default(omit) }}'
-    state: 'present'
+    state: '{{ "present" if item.disabled is undefined or not item.disabled else "absent" }}'
   with_items: '{{ system_groups__list }}'
-  when: ((item.name is defined and item.name and item.name != 'root') and
-         (item.disabled is undefined or not item.disabled))
-
-- name: Remove system groups
-  group:
-    name: '{{ item.name }}'
-    state: 'absent'
-  with_items: '{{ system_groups__list }}'
-  when: ((item.name is defined and item.name and item.name != 'root') and
-         (item.disabled is defined and item.disabled))
+  when: (item.name is defined and item.name and item.name != 'root')
