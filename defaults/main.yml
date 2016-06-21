@@ -1,0 +1,11 @@
+---
+# list of system groups
+system_groups__list: []
+## group name
+#  - name: string
+## OPTIONAL: if set to True, group is removed from host
+#    disabled: bool
+## OPTIONAL: group id
+#    gid: int
+## OPTIONAL: system group flag
+#    system: bool

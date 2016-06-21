@@ -1,0 +1,108 @@
+---
+- name: Initialize test docker containers
+  hosts: localhost
+  roles:
+    - role: 'provision_docker'
+      provision_docker__inventory:
+        - name: 'test_system_groups_main_centos7'
+          image: 'tomashavlas/ansible-test:centos7'
+          volumes:
+            - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+        - name: 'test_system_groups_main_debian8'
+          image: 'tomashavlas/ansible-test:debian8'
+          volumes:
+            - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+  post_tasks:
+    - name: Wait for SSH connection to docker containers
+      wait_for:
+        host: '{{ hostvars[item.name]["ansible_ssh_host"] }}'
+        port: 22
+        timeout: 30
+        connect_timeout: 30
+      with_items: '{{ provision_docker__inventory }}'
+  tags: [ 'initialize-docker' ]
+
+- name: Run system_groups role basic test scenario
+  hosts: provision_docker__containers
+  remote_user: 'root'
+  pre_tasks:
+    - name: Create "remove me" test group
+      group:
+        name: 'removeme'
+        state: 'present'
+      changed_when: False
+      tags: [ 'pre-test' ]
+  post_tasks:
+    - name: Validate simple group presence test
+      group:
+        name: 'test'
+        state: 'present'
+      register: 'test_result'
+      failed_when: ((test_result.failed is defined and test_result.failed) or
+                    (test_result.changed is defined and test_result.changed))
+      tags: [ 'acceptance-test' ]
+    - name: Test advenced group presence
+      group:
+        name: 'testadv'
+        gid: 2100
+        state: 'present'
+      register: 'test_result'
+      failed_when: ((test_result.failed is defined and test_result.failed) or
+                    (test_result.changed is defined and test_result.changed))
+      tags: [ 'acceptance-test' ]
+    - name: Test system group presence
+      group:
+        name: 'testsys'
+        system: 'yes'
+        state: 'present'
+      register: 'test_result'
+      failed_when: ((test_result.failed is defined and test_result.failed) or
+                    (test_result.changed is defined and test_result.changed))
+      tags: [ 'acceptance-test' ]
+    - name: Test disabled group absence
+      group:
+        name: 'disabled'
+        state: 'absent'
+      register: 'test_result'
+      failed_when: ((test_result.failed is defined and test_result.failed) or
+                    (test_result.changed is defined and test_result.changed))
+      tags: [ 'acceptance-test' ]
+    - name: Test sample group absence
+      group:
+        name: 'removeme'
+        state: 'absent'
+      register: 'test_result'
+      failed_when: ((test_result.failed is defined and test_result.failed) or
+                    (test_result.changed is defined and test_result.changed))
+      tags: [ 'acceptance-test' ]
+    - name: Test not disabled group presence
+      group:
+        name: 'notdisabled'
+        state: 'present'
+      register: 'test_result'
+      failed_when: ((test_result.failed is defined and test_result.failed) or
+                    (test_result.changed is defined and test_result.changed))
+      tags: [ 'acceptance-test' ]
+  roles:
+      - role: 'system_groups'
+        system_groups__list:
+# test simple group
+          - name: 'test'
+
+# test advanced group
+          - name: 'testadv'
+            gid: 2100
+
+# test system group
+          - name: 'testsys'
+            system: 'yes'
+
+# test disabled group
+          - name: 'disabled'
+            disabled: True
+          - name: 'removeme'
+            disabled: True
+
+# test not disabled group
+          - name: 'notdisabled'
+            disabled: False
