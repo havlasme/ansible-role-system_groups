@@ -83,6 +83,15 @@
       failed_when: ((test_result.failed is defined and test_result.failed) or
                     (test_result.changed is defined and test_result.changed))
       tags: [ 'acceptance-test' ]
+    - name: Test root group is not changed
+      group:
+        name: 'root'
+        gid: 0
+        state: 'present'
+      register: 'test_result'
+      failed_when: ((test_result.failed is defined and test_result.failed) or
+                    (test_result.changed is defined and test_result.changed))
+      tags: [ 'acceptance-test' ]
   roles:
       - role: 'system_groups'
         system_groups__list:
@@ -106,3 +115,7 @@
 # test not disabled group
           - name: 'notdisabled'
             disabled: False
+
+# test root group
+          - name: 'root'
+            gid: 4000

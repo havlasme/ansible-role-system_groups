@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Joined system group setup and remove tasks into single task.
+  [tomashavlas]
+
+- Created test case for root group.
+  [tomashavlas]
+
 v1.0
 ----
 
