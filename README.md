@@ -51,6 +51,8 @@ Example Playbook
             disabled: True
 ```
 
+For more examples see [test cases](https://github.com/tomashavlas/ansible-role-system_groups/tree/master/tests).
+
 License
 -------
 
