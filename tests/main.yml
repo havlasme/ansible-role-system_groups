@@ -38,8 +38,7 @@
         name: 'test'
         state: 'present'
       register: 'test_result'
-      failed_when: ((test_result.failed is defined and test_result.failed) or
-                    (test_result.changed is defined and test_result.changed))
+      failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Test advanced group presence
       group:
@@ -47,8 +46,7 @@
         gid: 2100
         state: 'present'
       register: 'test_result'
-      failed_when: ((test_result.failed is defined and test_result.failed) or
-                    (test_result.changed is defined and test_result.changed))
+      failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Test system group presence
       group:
@@ -56,32 +54,28 @@
         system: 'yes'
         state: 'present'
       register: 'test_result'
-      failed_when: ((test_result.failed is defined and test_result.failed) or
-                    (test_result.changed is defined and test_result.changed))
+      failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Test disabled group absence
       group:
         name: 'disabled'
         state: 'absent'
       register: 'test_result'
-      failed_when: ((test_result.failed is defined and test_result.failed) or
-                    (test_result.changed is defined and test_result.changed))
+      failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Test sample group absence
       group:
         name: 'removeme'
         state: 'absent'
       register: 'test_result'
-      failed_when: ((test_result.failed is defined and test_result.failed) or
-                    (test_result.changed is defined and test_result.changed))
+      failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Test not disabled group presence
       group:
         name: 'notdisabled'
         state: 'present'
       register: 'test_result'
-      failed_when: ((test_result.failed is defined and test_result.failed) or
-                    (test_result.changed is defined and test_result.changed))
+      failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Test root group is not changed
       group:
@@ -89,8 +83,7 @@
         gid: 0
         state: 'present'
       register: 'test_result'
-      failed_when: ((test_result.failed is defined and test_result.failed) or
-                    (test_result.changed is defined and test_result.changed))
+      failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
   roles:
       - role: 'system_groups'
