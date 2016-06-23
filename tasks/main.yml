@@ -6,4 +6,4 @@
     system: '{{ item.system|default(omit) }}'
     state: '{{ "present" if item.disabled is undefined or not item.disabled else "absent" }}'
   with_items: '{{ system_groups__list }}'
-  when: (item.name is defined and item.name and item.name != 'root')
+  when: (item.name is defined and item.name|trim and item.name != 'root')
