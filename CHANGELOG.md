@@ -16,6 +16,9 @@ Unreleased
 - Replaced complex conditions with `changed` and `failed` filters in acceptance tests.
   [tomashavlas]
 
+- Updated minimal Ansible version to `2.0`.
+  [tomashavlas]
+
 v1.0
 ----
 
