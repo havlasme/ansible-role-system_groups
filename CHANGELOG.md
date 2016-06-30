@@ -1,8 +1,10 @@
 Changelog
 =========
 
-Unreleased
+v1.1
 ----------
+
+*Released: 2016-06-30*
 
 - Joined system group setup and remove tasks into single task.
   [tomashavlas]
