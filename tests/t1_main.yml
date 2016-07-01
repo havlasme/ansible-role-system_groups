@@ -1,14 +1,14 @@
 ---
-- name: Initialize test docker containers
+- name: Pre-Test Scenario 1.0 - initialize docker containers
   hosts: localhost
   roles:
     - role: 'provision_docker'
       provision_docker__inventory:
-        - name: 'test_system_groups_main_centos7'
+        - name: 'test_system_groups_t1_centos7'
           image: 'tomashavlas/ansible-test:centos7'
           volumes:
             - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-        - name: 'test_system_groups_main_debian8'
+        - name: 'test_system_groups_t1_debian8'
           image: 'tomashavlas/ansible-test:debian8'
           volumes:
             - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
@@ -22,62 +22,62 @@
       with_items: '{{ provision_docker__inventory }}'
   tags: [ 'initialize-docker' ]
 
-- name: Run system_groups role basic test scenario
+- name: Test Scenario 1.1 - basic functionality
   hosts: provision_docker__containers
   remote_user: 'root'
   pre_tasks:
-    - name: Create "remove me" test group
+    - name: Pre-Test - create "remove me" test group
       group:
-        name: 'removeme'
+        name: 's1_removeme'
         state: 'present'
       changed_when: False
       tags: [ 'pre-test' ]
   post_tasks:
-    - name: Test simple group presence
+    - name: Acceptance Test - simple group presence
       group:
-        name: 'test'
+        name: 's1_test'
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Test advanced group presence
+    - name: Acceptance Test - advanced group presence
       group:
-        name: 'testadv'
+        name: 's1_testadv'
         gid: 2100
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Test system group presence
+    - name: Acceptance Test - system group presence
       group:
-        name: 'testsys'
+        name: 's1_testsys'
         system: 'yes'
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Test disabled group absence
+    - name: Acceptance Test - disabled group absence
       group:
-        name: 'disabled'
+        name: 's1_disabled'
         state: 'absent'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Test sample group absence
+    - name: Acceptance Test - "remove me" group absence
       group:
-        name: 'removeme'
+        name: 's1_removeme'
         state: 'absent'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Test not disabled group presence
+    - name: Acceptance Test - not disabled group presence
       group:
-        name: 'notdisabled'
+        name: 's1_notdisabled'
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Test root group is not changed
+    - name: Acceptance Test - root group not changed
       group:
         name: 'root'
         gid: 0
@@ -89,26 +89,21 @@
       - role: 'system_groups'
         system_groups__list:
 # test simple group
-          - name: 'test'
-
+          - name: 's1_test'
 # test advanced group
-          - name: 'testadv'
+          - name: 's1_testadv'
             gid: 2100
-
 # test system group
-          - name: 'testsys'
+          - name: 's1_testsys'
             system: 'yes'
-
 # test disabled group
-          - name: 'disabled'
+          - name: 's1_disabled'
             disabled: True
-          - name: 'removeme'
+          - name: 's1_removeme'
             disabled: True
-
 # test not disabled group
-          - name: 'notdisabled'
+          - name: 's1_notdisabled'
             disabled: False
-
 # test root group
           - name: 'root'
             gid: 4000
