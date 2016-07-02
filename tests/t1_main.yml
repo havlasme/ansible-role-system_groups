@@ -13,7 +13,7 @@
           volumes:
             - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
   post_tasks:
-    - name: Wait for SSH connection to docker containers
+    - name: Wait for SSH connection to Docker containers
       wait_for:
         host: '{{ hostvars[item.name]["ansible_ssh_host"] }}'
         port: 22
