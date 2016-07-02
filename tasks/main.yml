@@ -7,3 +7,4 @@
     state: '{{ (item.disabled is undefined or not item.disabled|bool)|ternary("present", "absent") }}'
   with_items: '{{ system_groups__list }}'
   when: (item.name is defined and item.name|trim and item.name != 'root')
+  tags: [ 'configure' ]
