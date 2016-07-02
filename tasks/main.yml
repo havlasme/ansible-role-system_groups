@@ -1,5 +1,5 @@
 ---
-- name: Manage system groups
+- name: Configure - Create, update, and remove system groups
   group:
     name: '{{ item.name }}'
     gid: '{{ item.gid|default(omit) }}'

@@ -22,25 +22,25 @@
       with_items: '{{ provision_docker__inventory }}'
   tags: [ 'initialize-docker' ]
 
-- name: Test Scenario 1.1 - basic functionality
+- name: Test Scenario 1.1 - Basic role functionality
   hosts: provision_docker__containers
   remote_user: 'root'
   pre_tasks:
-    - name: Pre-Test - create "remove me" test group
+    - name: Pre-Test - Create "remove me" test group
       group:
         name: 's1_removeme'
         state: 'present'
       changed_when: False
       tags: [ 'pre-test' ]
   post_tasks:
-    - name: Acceptance Test - simple group presence
+    - name: Acceptance Test - Verify simple group presence
       group:
         name: 's1_test'
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - advanced group presence
+    - name: Acceptance Test - Verify advanced group presence
       group:
         name: 's1_testadv'
         gid: 2100
@@ -48,7 +48,7 @@
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - system group presence
+    - name: Acceptance Test - Verify system group presence
       group:
         name: 's1_testsys'
         system: 'yes'
@@ -56,28 +56,28 @@
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - disabled group absence
+    - name: Acceptance Test - Verify disabled group absence
       group:
         name: 's1_disabled'
         state: 'absent'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - "remove me" group absence
+    - name: Acceptance Test - Verify "remove me" group absence
       group:
         name: 's1_removeme'
         state: 'absent'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - not disabled group presence
+    - name: Acceptance Test - Verify "not disabled" group presence
       group:
         name: 's1_notdisabled'
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - root group not changed
+    - name: Acceptance Test - Verify root group was not changed
       group:
         name: 'root'
         gid: 0
