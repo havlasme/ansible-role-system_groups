@@ -30,7 +30,7 @@
       group:
         name: 's1_removeme'
         state: 'present'
-      changed_when: False
+      changed_when: false
       tags: [ 'pre-test' ]
   post_tasks:
     - name: Acceptance Test - Verify simple group presence
@@ -51,7 +51,7 @@
     - name: Acceptance Test - Verify system group presence
       group:
         name: 's1_testsys'
-        system: 'yes'
+        system: true
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
@@ -95,15 +95,15 @@
             gid: 2100
 # test system group
           - name: 's1_testsys'
-            system: 'yes'
+            system: true
 # test disabled group
           - name: 's1_disabled'
-            disabled: True
+            disabled: true
           - name: 's1_removeme'
-            disabled: True
+            disabled: true
 # test not disabled group
           - name: 's1_notdisabled'
-            disabled: False
+            disabled: false
 # test root group
           - name: 'root'
             gid: 4000
