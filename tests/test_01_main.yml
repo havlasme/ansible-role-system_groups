@@ -4,11 +4,11 @@
   roles:
     - role: 'provision_docker'
       provision_docker__inventory:
-        - name: 'test_system_groups_t1_centos7'
+        - name: 'test_system_groups_01_centos7'
           image: 'tomashavlas/ansible-test:centos7'
           volumes:
             - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-        - name: 'test_system_groups_t1_debian8'
+        - name: 'test_system_groups_01_debian8'
           image: 'tomashavlas/ansible-test:debian8'
           volumes:
             - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
@@ -28,56 +28,56 @@
   pre_tasks:
     - name: Pre-Test - Create "remove me" test group
       group:
-        name: 's1_removeme'
+        name: 's1_group5'
         state: 'present'
       changed_when: false
       tags: [ 'pre-test' ]
   post_tasks:
-    - name: Acceptance Test - Verify simple group presence
+    - name: Acceptance Test - Verify minimal group
       group:
-        name: 's1_test'
+        name: 's1_group1'
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - Verify advanced group presence
+    - name: Acceptance Test - Verify complete group
       group:
-        name: 's1_testadv'
+        name: 's1_group2'
         gid: 2100
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - Verify system group presence
+    - name: Acceptance Test - Verify system group
       group:
-        name: 's1_testsys'
+        name: 's1_group3'
         system: true
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - Verify disabled group absence
+    - name: Acceptance Test - Verify disabled group (1 / 2)
       group:
-        name: 's1_disabled'
+        name: 's1_group4'
         state: 'absent'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - Verify "remove me" group absence
+    - name: Acceptance Test - Verify disabled group (2 / 2)
       group:
-        name: 's1_removeme'
+        name: 's1_group5'
         state: 'absent'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - Verify "not disabled" group presence
+    - name: Acceptance Test - Verify not disabled group
       group:
-        name: 's1_notdisabled'
+        name: 's1_group6'
         state: 'present'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - Verify root group was not changed
+    - name: Acceptance Test - Verify root group
       group:
         name: 'root'
         gid: 0
@@ -88,21 +88,21 @@
   roles:
       - role: 'system_groups'
         system_groups__list:
-# test simple group
-          - name: 's1_test'
-# test advanced group
-          - name: 's1_testadv'
+# test minimal group
+          - name: 's1_group1'
+# test complete group
+          - name: 's1_group2'
             gid: 2100
 # test system group
-          - name: 's1_testsys'
+          - name: 's1_group3'
             system: true
 # test disabled group
-          - name: 's1_disabled'
+          - name: 's1_group4'
             disabled: true
-          - name: 's1_removeme'
+          - name: 's1_group5'
             disabled: true
 # test not disabled group
-          - name: 's1_notdisabled'
+          - name: 's1_group6'
             disabled: false
 # test root group
           - name: 'root'
