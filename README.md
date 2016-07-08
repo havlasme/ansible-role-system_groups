@@ -41,7 +41,7 @@ Example Playbook
 ```yaml
 - hosts: all
   roles:
-    - role: 'system_groups'
+    - role: 'tomashavlas.system_groups'
       system_groups__list:
           - name: 'usergrp'
             gid: 1564

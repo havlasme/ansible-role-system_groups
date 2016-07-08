@@ -2,7 +2,7 @@
 - name: Pre-Test Scenario 1.0 - Initialize Docker containers
   hosts: localhost
   roles:
-    - role: 'provision_docker'
+    - role: 'tomashavlas.provision_docker'
       provision_docker__inventory:
         - name: 'test_system_groups_01_centos7'
           image: 'tomashavlas/ansible-test:centos7'
@@ -86,7 +86,7 @@
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
   roles:
-      - role: 'system_groups'
+      - role: 'tomashavlas.system_groups'
         system_groups__list:
 # test minimal group
           - name: 's1_group1'
