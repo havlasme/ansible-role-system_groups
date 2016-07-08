@@ -3,7 +3,7 @@
 system_groups__list: []
 ## group name
 #  - name: string
-## OPTIONAL: if set to True, group is removed from host
+## OPTIONAL: if set to true, group is removed from host
 #    disabled: bool
 ## OPTIONAL: group id
 #    gid: int

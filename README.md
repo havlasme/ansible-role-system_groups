@@ -22,7 +22,7 @@ Role Variables
 system_groups__list: []
 ## group name
 #  - name: string
-## OPTIONAL: if set to True, group is removed from host
+## OPTIONAL: if set to true, group is removed from host
 #    disabled: bool
 ## OPTIONAL: group id
 #    gid: int
@@ -46,9 +46,9 @@ Example Playbook
           - name: 'usergrp'
             gid: 1564
           - name: 'systemgrp'
-            system: 'yes'
+            system: true
           - name: 'disabledgrp'
-            disabled: True
+            disabled: true
 ```
 
 For more examples see [test cases](https://github.com/tomashavlas/ansible-role-system_groups/tree/master/tests).
