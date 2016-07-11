@@ -2,8 +2,8 @@
 - name: Configure - Create, update, and remove system groups
   group:
     name: "{{ item.name }}"
-    gid: "{{ item.gid|default(omit) }}"
-    system: "{{ item.system|default(omit) }}"
+    gid: "{{ item.gid|d(omit) }}"
+    system: "{{ item.system|d(omit) }}"
     state: "{{ (item.disabled is undefined or not item.disabled|bool)|ternary('present', 'absent') }}"
   with_items: "{{ system_groups__list }}"
   when: (item.name is defined and item.name|trim and item.name != "root")
