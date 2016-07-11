@@ -2,108 +2,108 @@
 - name: Pre-Test Scenario 1.0 - Initialize Docker containers
   hosts: localhost
   roles:
-    - role: 'tomashavlas.provision_docker'
+    - role: "tomashavlas.provision_docker"
       provision_docker__inventory:
-        - name: 'test_system_groups_01_centos7'
-          image: 'tomashavlas/ansible-test:centos7'
+        - name: "test_system_groups_01_centos7"
+          image: "tomashavlas/ansible-test:centos7"
           volumes:
-            - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-        - name: 'test_system_groups_01_debian8'
-          image: 'tomashavlas/ansible-test:debian8'
+            - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+        - name: "test_system_groups_01_debian8"
+          image: "tomashavlas/ansible-test:debian8"
           volumes:
-            - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+            - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
   post_tasks:
     - name: Wait for SSH connection to Docker containers
       wait_for:
-        host: '{{ hostvars[item.name]["ansible_ssh_host"] }}'
+        host: "{{ hostvars[item.name]['ansible_ssh_host'] }}"
         port: 22
         timeout: 30
         connect_timeout: 30
-      with_items: '{{ provision_docker__inventory }}'
-  tags: [ 'initialize-docker' ]
+      with_items: "{{ provision_docker__inventory }}"
+  tags: [ "initialize-docker" ]
 
 - name: Test Scenario 1.1 - Basic role functionality
   hosts: provision_docker__containers
-  remote_user: 'root'
+  remote_user: "root"
   pre_tasks:
     - name: Pre-Test - Create "remove me" test group
       group:
-        name: 's1_group5'
-        state: 'present'
+        name: "s1_group5"
+        state: "present"
       changed_when: false
-      tags: [ 'pre-test' ]
+      tags: [ "pre-test" ]
   post_tasks:
     - name: Acceptance Test - Verify minimal group
       group:
-        name: 's1_group1'
-        state: 'present'
-      register: 'test_result'
+        name: "s1_group1"
+        state: "present"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify complete group
       group:
-        name: 's1_group2'
+        name: "s1_group2"
         gid: 2100
-        state: 'present'
-      register: 'test_result'
+        state: "present"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify system group
       group:
-        name: 's1_group3'
+        name: "s1_group3"
         system: true
-        state: 'present'
-      register: 'test_result'
+        state: "present"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify disabled group (1 / 2)
       group:
-        name: 's1_group4'
-        state: 'absent'
-      register: 'test_result'
+        name: "s1_group4"
+        state: "absent"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify disabled group (2 / 2)
       group:
-        name: 's1_group5'
-        state: 'absent'
-      register: 'test_result'
+        name: "s1_group5"
+        state: "absent"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify not disabled group
       group:
-        name: 's1_group6'
-        state: 'present'
-      register: 'test_result'
+        name: "s1_group6"
+        state: "present"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify root group
       group:
-        name: 'root'
+        name: "root"
         gid: 0
-        state: 'present'
-      register: 'test_result'
+        state: "present"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
   roles:
-      - role: 'tomashavlas.system_groups'
+      - role: "tomashavlas.system_groups"
         system_groups__list:
 # test minimal group
-          - name: 's1_group1'
+          - name: "s1_group1"
 # test complete group
-          - name: 's1_group2'
+          - name: "s1_group2"
             gid: 2100
 # test system group
-          - name: 's1_group3'
+          - name: "s1_group3"
             system: true
 # test disabled group
-          - name: 's1_group4'
+          - name: "s1_group4"
             disabled: true
-          - name: 's1_group5'
+          - name: "s1_group5"
             disabled: true
 # test not disabled group
-          - name: 's1_group6'
+          - name: "s1_group6"
             disabled: false
 # test root group
-          - name: 'root'
+          - name: "root"
             gid: 4000

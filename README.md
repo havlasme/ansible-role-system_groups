@@ -41,13 +41,13 @@ Example Playbook
 ```yaml
 - hosts: all
   roles:
-    - role: 'tomashavlas.system_groups'
+    - role: "tomashavlas.system_groups"
       system_groups__list:
-          - name: 'usergrp'
+          - name: "usergrp"
             gid: 1564
-          - name: 'systemgrp'
+          - name: "systemgrp"
             system: true
-          - name: 'disabledgrp'
+          - name: "disabledgrp"
             disabled: true
 ```
 
